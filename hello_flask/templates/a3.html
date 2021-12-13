@@ -1,0 +1,110 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<style> 
+			table, th, td {
+				padding: 15px;
+				text-align: center;
+				background-color: #04AA6D;
+				border: 1px solid black;
+				color: white;
+			}
+			
+			body {
+				background-image: url('https://wallpaperaccess.com/full/22917.jpg');
+			}
+
+			#login {
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 300px;
+				position: relative;
+				z-index: 1;
+				background: #FFFFFF;
+				max-width: 360px;
+				padding; 45px;
+				text-align" center;
+				box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+				border-radius: 10px;
+			}
+		</style>
+
+		<div id="login">
+			<h2>Please Login to the Bookstore!</h2>
+			<label>Username:</label><br>
+			<input type="text" id="userInput"name="username"></input><br>
+			<label>Password:</label><br>
+			<input type="password" id="passInput" name="password"></input><br><br>
+			<input type="submit" value="Login" onclick="verification()">
+		</div>
+
+		<div id="bookList">
+			<h1 style="color: White">Book List</h1>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Book Title</th>
+						<th>Author</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody id="books">
+				</tbody>
+			</table>
+		</div>
+
+		<div id="purchasedBookList">
+			<h1 style="color: White">Your Purchased Books</h1>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Book Title</th>
+						<th>Author</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody id="purchasedbooks">
+				</tbody>
+			</table>
+		</div>
+			
+		<script>
+			var token;
+			var response;
+			$("#bookList").hide();
+			$("#purchasedBookList").hide();
+
+			async function verification(){
+				const response = await $.post("/userauth", {"username": document.getElementById("userInput").value, "password": document.getElementById("passInput").value}, "json");
+				if(response.status == 200){
+					token = await response.data;
+					getBooks();
+					$("#login").hide();
+					$("#bookList").show();
+				}else{
+					alert(response.data.message);
+				}
+			}
+
+			async function getBooks(){
+				const response = await $.post("/getbooks", {"jwt": token.jwt}, "json");
+				console.log(response.data.books.length);
+				for(i = 0; i < response.data.books.length; i++) {
+					$("#books").append( "<tr><td><button id=\"" + response.data.books[i].book_id + "\" onclick=\"purchaseBook(this.id);\">Buy</button></td>" + "<td>" + response.data.books[i].title + "</td>" + "<td>" + response.data.books[i].author + "</td>" + "<td>$" + response.data.books[i].price + "</td></tr>");
+				}
+			}
+
+			async function purchaseBook(id){
+				const response = await $.post("/purchase", {"jwt": token.jwt, "book_id": id}, "json"); 
+				alert(response.data.message);
+				if (response.status == 200){
+					$("#purchasedBookList").show();
+				}
+			}
+
+		</script>
+	</body>
+</html>
