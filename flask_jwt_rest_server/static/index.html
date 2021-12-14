@@ -12,7 +12,15 @@
 			}
 
 			body {
-				background-image: url('https://wallpaperaccess.com/full/22917.jpg');
+				background-image: url('https://i.pinimg.com/originals/3c/93/13/3c931317327e34802a569034c1d1fb5c.gif');
+				height: 100%
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+
+			html {
+				font-family: "Lato", Arial, sans-serif;
 			}
 
 			#login {
@@ -32,7 +40,7 @@
 		</style>
 
 		<div id="login">
-			<h2>Please Login to the Bookstore!</h2>
+			<h2>Crafting Table Login</h2>
 			<label>Username:</label><br>
 			<input type="text" id="userInput"name="username"></input><br>
 			<label>Password:</label><br>
@@ -40,8 +48,8 @@
 			<input type="submit" value="Login" onclick="verification()">
 		</div>
 
-		<div id="bookList">
-			<h1 style="color: White">Book List</h1>
+		<div id="craftingItems">
+			<h1 style="color: White">Crafting Items</h1>
 			<table>
 				<thead>
 					<tr>
@@ -51,14 +59,14 @@
 						<th>Price</th>
 					</tr>
 				</thead>
-				<tbody id="books">
+				<tbody id="items">
 				</tbody>
 			</table>
 		</div>
 
 
-		<div id="purchasedBookList">
-			<h1 style="color: White">Your Purchased Books</h1>
+		<div id="purchasedItems">
+			<h1 style="color: White">Your Purchased Items</h1>
 			<table>
 				<thead>
 					<tr>
@@ -68,7 +76,7 @@
 						<th>Price</th>
 					</tr>
 				</thead>
-				<tbody id="purchasedbooks">
+				<tbody id="purchaseditems">
 				</tbody>
 			</table>
 		</div>
@@ -76,8 +84,8 @@
 		<script>
 			var token;
 			var response;
-			$("#bookList").hide();
-			$("#purchasedBookList").hide();
+			$("#craftingItems").hide();
+			$("#purchasedItems").hide();
 
 			async function verification(){
 				const response = await $.post("/open_api/login", {"username": document.getElementById("userInput").value, "password": document.getElementById("passInput").value}, "json");
@@ -85,7 +93,7 @@
 					token = await response.data;
 					getBooks();
 					$("#login").hide();
-					$("#bookList").show();
+					$("#craftingItems").show();
 				}else{
 					alert(response.data.message);
 				}
@@ -95,7 +103,7 @@
 				const response = await $.post("/secure_api/get_books", {"jwt": token.jwt}, "json");
 				console.log(response.data.books.length);
 				for(i = 0; i < response.data.books.length; i++) {
-					$("#books").append( "<tr><td><button id=\"" + response.data.books[i].book_id + "\" onclick=\"purchaseBook(this.id);\">Buy</button></td>" + "<td>" + response.data.books[i].title + "</td>" + "<td>" + response.data.books[i].author + "</td>" + "<td>$" + response.data.books[i].price + "</td></tr>"); 
+					$("#items").append( "<tr><td><button id=\"" + response.data.books[i].book_id + "\" onclick=\"purchaseBook(this.id);\">Buy</button></td>" + "<td>" + response.data.books[i].title + "</td>" + "<td>" + response.data.books[i].author + "</td>" + "<td>$" + response.data.books[i].price + "</td></tr>"); 
 				}
 			}
 
@@ -103,7 +111,7 @@
 				const response = await $.post("/secure_api/purchase_book", {"jwt": token.jwt, "book_id": id}, "json"); 
 				alert(response.data.message); 
 				if (response.status == 200){
-					$("#purchasedBookList").show();
+					$("#purchasedItems").show();
 				}
 			}
 		</script>	
