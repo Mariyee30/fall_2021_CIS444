@@ -2,26 +2,10 @@ import psycopg2
 
 
 def get_db():
-    return psycopg2.connect(host="localhost", dbname="books" , user="b_user", password="b_password")
+    return psycopg2.connect(host="localhost", dbname="minecraft" , user="m_user", password="m_password")
 
 def get_db_instance():  
     db  = get_db()
     cur  = db.cursor( )
 
     return db, cur 
-
-
-
-if __name__ == "__main__":
-    db, cur = get_db_instance()
-
-    cur.execute("select * from users")
-    for r in cur.fetchall():
-        print(r)
-
-    cur.execute("create table music ( song_name varchar(255), rating int);")
-    db.commit()
-
-
-
-

@@ -30,7 +30,7 @@
 				position: relative;
 				z-index: 1;
 				background: #FFFFFF;
-				max-width: 360px;
+				max-width: 400px;
 				padding; 45px;
 				text-align" center;
 				box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -40,7 +40,7 @@
 		</style>
 
 		<div id="login">
-			<h2>Crafting Table Login</h2>
+			<h2 style="text-align:center">Crafting Table Login</h2>
 			<label>Username:</label><br>
 			<input type="text" id="userInput"name="username"></input><br>
 			<label>Password:</label><br>
@@ -54,9 +54,9 @@
 				<thead>
 					<tr>
 						<th></th>
-						<th>Book Title</th>
-						<th>Author</th>
-						<th>Price</th>
+						<th>Type</th>
+						<th>Item</th>
+						<th>Cost</th>
 					</tr>
 				</thead>
 				<tbody id="items">
@@ -71,12 +71,10 @@
 				<thead>
 					<tr>
 						<th></th>
-						<th>Book Title</th>
-						<th>Author</th>
-						<th>Price</th>
+						<th>Item</th>
 					</tr>
 				</thead>
-				<tbody id="purchaseditems">
+				<tbody id="purchasedItems">
 				</tbody>
 			</table>
 		</div>
@@ -91,7 +89,7 @@
 				const response = await $.post("/open_api/login", {"username": document.getElementById("userInput").value, "password": document.getElementById("passInput").value}, "json");
 				if(response.status == 200){
 					token = await response.data;
-					getBooks();
+					getItems();
 					$("#login").hide();
 					$("#craftingItems").show();
 				}else{
@@ -99,17 +97,17 @@
 				}
 			}
 
-			async function getBooks(){
-				const response = await $.post("/secure_api/get_books", {"jwt": token.jwt}, "json");
-				console.log(response.data.books.length);
-				for(i = 0; i < response.data.books.length; i++) {
-					$("#items").append( "<tr><td><button id=\"" + response.data.books[i].book_id + "\" onclick=\"purchaseBook(this.id);\">Buy</button></td>" + "<td>" + response.data.books[i].title + "</td>" + "<td>" + response.data.books[i].author + "</td>" + "<td>$" + response.data.books[i].price + "</td></tr>"); 
+			async function getItems(){
+				const response = await $.post("/secure_api/get_items", {"jwt": token.jwt}, "json");
+				console.log(response.data.items.length);
+				for(i = 0; i < response.data.items.length; i++) {
+					$("#items").append( "<tr><td><button id=\"" + response.data.items[i].item_id + "\" onclick=\"purchaseItem(this.id);\">Craft</button></td>" + "<td>" + response.data.items[i].type + "</td>" + "<td>" + response.data.items[i].name + "</td>" + "<td>$" + response.data.items[i].cost + "</td></tr>"); 
 				}
 			}
 
-			async function purchaseBook(id){
-				const response = await $.post("/secure_api/purchase_book", {"jwt": token.jwt, "book_id": id}, "json"); 
-				alert(response.data.message); 
+			async function purchaseItem(id){
+				const response = await $.post("/secure_api/purchase_item", {"jwt": token.jwt, "item_id": id}, "json"); 
+				alert(response.data.message);
 				if (response.status == 200){
 					$("#purchasedItems").show();
 				}
