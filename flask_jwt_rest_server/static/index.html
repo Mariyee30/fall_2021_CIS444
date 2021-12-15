@@ -105,20 +105,24 @@
 					name = `<td>${response.data.items[i].name}</td>`;
 					cost = `<td>${response.data.items[i].cost}</td>`;
 
-					$("#books").append("<tr>" + craft + type + name + cost + "</tr>");
-
-					<!--
-					$("#items").append( "<tr><td><button id=\"" + response.data.items[i].item_id + "\" onclick=\"purchaseItem(this.id);\">Craft</button></td>" + "<td>" + response.data.items[i].type + "</td>" + "<td>" + response.data.items[i].name + "</td>" + "<td>" + response.data.items[i].cost + "</td></tr>");
-					-->
+					$("#items").append("<tr>" + craft + type + name + cost + "</tr>");
 				}
 			}
 
 			async function purchaseItem(id){
 				const response = await $.post("/secure_api/purchase_item", {"jwt": token.jwt, "item_id": id}, "json"); 
-				alert(response.data.message);
 				if (response.status == 200){
-					$("#purchasedItems").show();
+					alert("Item was crafted.");
+					for(i = 0; i < response.data.items.length; i++) {
+						name = `<td>${response.data.items[i].name}</td>`;
+						$("#purchasedItems").append("<tr>" + name + "</tr>");
+					
+						$("#purchasedItems").show();
+					}
 				}
+				else {
+					alert(response.data.message);
+				}				
 			}
 		</script>	
 	</body>
