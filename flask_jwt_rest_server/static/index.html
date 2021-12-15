@@ -35,8 +35,22 @@
 				z-index: 1;
 				background: #FFFFFF;
 				max-width: 400px;
-				padding; 45px;
-				text-align" center;
+				padding: 45px;
+				text-align: center;
+				box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+				border-radius: 10px;
+			}
+
+			#signUp {
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 300px;
+				position: relative;
+				z-index: 1;
+				background: #FFFFFF;
+				max-width: 400px;
+				padding: 45px;
+				text-align: center;
 				box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 				border-radius: 10px;
 			}
@@ -50,6 +64,19 @@
 			<label>Password:</label><br>
 			<input type="password" id="passInput" name="password"></input><br><br>
 			<input type="submit" value="Login" onclick="verification()">
+
+			<input type="submit" value="Create Account" onclick="hideLogIn()">
+		</div>
+
+		<div id="signUp">
+			<h2 style="text-align:center">Crafting Table Sign Up</h2>
+			<label>Username:</label><br>
+			<input type="text" id="userInputNew"name="username"></input><br>
+			<label>Password:</label><br>
+			<input type="password" id="passInputNew" name="password"></input><br><br>
+			<input type="submit" value="Sign Up" onclick="signUp()">
+
+			<input type="submit" value="Go Back" onclick="hideSignUp()">
 		</div>
 
 		<div id="craftingItems">
@@ -87,6 +114,7 @@
 			var response;
 			$("#craftingItems").hide();
 			$("#purchasedItems").hide();
+			$("#signUp").hide();
 
 			async function verification(){
 				const response = await $.post("/open_api/login", {"username": document.getElementById("userInput").value, "password": document.getElementById("passInput").value}, "json");
@@ -96,6 +124,29 @@
 					$("#login").hide();
 					$("#craftingItems").show();
 				}else{
+					alert(response.data.message);
+				}
+			}
+
+			async function hideLogIn() {
+				$("#login").hide();
+				$("#signUp").show();
+			}
+
+			async function hideSignUp() {
+				$("#login").show();
+				$("#signUp").hide();
+			}
+
+			async function signUp(){
+				const response = await $.post("/open_api/signup", {"username": document.getElementById("userInputNew").value, "password": document.getElementById("passInputNew").value}, "json");
+
+				if(response.status == 200){
+					token = await response.data;
+					getItems();
+					$("#signUp").hide();
+					$("#craftingItems").show();
+				}else {
 					alert(response.data.message);
 				}
 			}
