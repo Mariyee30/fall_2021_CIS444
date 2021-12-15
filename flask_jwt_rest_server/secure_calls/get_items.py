@@ -35,7 +35,7 @@ def handle_request():
 			print("Adding items")
 			if count > 0: 
 				message += ","
-			message += "{\"type\": \"%s\", \"name\": \"%s\", \"cost\": \"%s\", \"id\": %s}" % (database_row[1], database_row[2], (database_row[3]), str(database_row[0]))
+			message += "{\"type\": \"%s\", \"name\": \"%s\", \"cost\": \"%s\", \"item_id\": %s}" % (database_row[1], database_row[2], (database_row[3]), str(database_row[0]))
 			count += 1 
 	message += "]}"
 

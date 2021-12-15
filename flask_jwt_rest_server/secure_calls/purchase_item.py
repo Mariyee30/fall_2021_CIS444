@@ -10,11 +10,11 @@ def handle_request():
 	logger.debug("Get Items Handle Request")
 	cursor = g.db.cursor()
 	try:
-		print("broke here")
 		cursor.execute("INSERT INTO purchased (user_id, item_id) VALUES (%s, %s);" % (str(g.jwt_data['user_id']), str(request.form['item_id']))) 
 		g.db.commit()
-		print("Item Crafted.")
+		print("Item was crafted.")
 		return json_response(data={"message": "Item was crafted."})
 	except:
 		print("Item was not crafted.")
 		return json_response(data={"message": "Item was not crafted."}, status=500)
+
