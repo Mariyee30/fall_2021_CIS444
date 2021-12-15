@@ -17,6 +17,7 @@ def handle_request():
 		user_id = g.jwt_data['user_id']
 
 		#string = " ".join(("SELECT name FROM items WHERE", "(SELECT FROM purchased WHERE items.item_id = purchased.item_id AND", str(user_id), "= purchased.user_id);"))
+		#string = " ".join(("SELECT name FROM items AS i, purchased AS u, purchased AS p ", "WHERE i.item_id = p.item_id AND", str(user_id), "= p.user_id);"))
 		string = "SELECT name FROM items WHERE item_id = 1"
 		cursor.execute(string, user_id)
 		message = "{\"items\":["

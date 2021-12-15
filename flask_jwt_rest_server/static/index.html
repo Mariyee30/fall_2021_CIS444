@@ -9,6 +9,10 @@
 				background-color: #04AA6D;
 				border: 1px solid black;
 				color: white;
+
+				margin: auto auto;
+				border-collapse: collapse;
+				border-spacing: 0;
 			}
 
 			body {
@@ -49,7 +53,7 @@
 		</div>
 
 		<div id="craftingItems">
-			<h1 style="color: White">Crafting Items</h1>
+			<h1 style="color: White; text-align:center;">Crafting Items</h1>
 			<table>
 				<thead>
 					<tr>
@@ -66,15 +70,14 @@
 
 
 		<div id="purchasedItems">
-			<h1 style="color: White">Your Inventory</h1>
+			<h1 style="color: White; text-align:center;">Your Inventory</h1>
 			<table>
 				<thead>
 					<tr>
-						<th></th>
-						<th>Item</th>
+						<th>Items</th>
 					</tr>
 				</thead>
-				<tbody id="purchasedItems">
+				<tbody id="pItems">
 				</tbody>
 			</table>
 		</div>
@@ -115,14 +118,14 @@
 					alert("Item was crafted.");
 					for(i = 0; i < response.data.items.length; i++) {
 						name = `<td>${response.data.items[i].name}</td>`;
-						$("#purchasedItems").append("<tr>" + name + "</tr>");
+						$("#pItems").append("<tr>" + name + "</tr>");
 					
 						$("#purchasedItems").show();
 					}
 				}
 				else {
 					alert(response.data.message);
-				}				
+				}	
 			}
 		</script>	
 	</body>
